@@ -15,12 +15,7 @@ class AuthorController extends Controller
     public function index()
     {
         $authors = Author::with('books')->paginate(10);
-        
-        // Esta aqui é a forma normal para o response da api.
-        // return response()->json([
-        //     'author' => $authors,
-        //     'message' => 'Authors Fetched with success'
-        // ], 200);
+
         return AuthorResource::collection($authors);
     }
 
@@ -31,12 +26,6 @@ class AuthorController extends Controller
     {
         $author = Author::create($request->validated());
 
-        // Esta aqui é a forma normal para o response da api.
-        // return response()->json([
-        //     'author' => $author
-        // ]);
-
-        // O Resource é para mostrar apenas informações que importão para quem vai consumir a api.
         return new AuthorResource($author);
     }
 
@@ -45,8 +34,16 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
-        $author = Author::find($author);
-        return new AuthorResource($author);
+        try{
+            return new AuthorResource($author);
+        } catch (\Exception $err) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error'.$err->getMessage()
+            ], 404);
+        }
+
+
     }
 
     /**
@@ -56,7 +53,7 @@ class AuthorController extends Controller
     {
         $author->update($request->validated());
 
-        return new AuthorResource(($author));
+        return new AuthorResource($author);
     }
 
     /**

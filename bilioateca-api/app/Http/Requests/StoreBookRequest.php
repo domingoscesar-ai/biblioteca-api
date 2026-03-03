@@ -24,7 +24,7 @@ class StoreBookRequest extends FormRequest
     {
         return [
             'titulo' => 'required|string|max:255',
-            'isbn' => ['required','string', Rule::unique('books', 'isbn') ->ignore($this->route('book')->id)],
+            'isbn' => ['required','string'],
             'descricao' => 'nullable|string',
             'author_id' => 'required|exists:authors,id',
             'genero' => 'nullable|string',

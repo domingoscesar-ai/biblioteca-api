@@ -11,7 +11,7 @@ class StoreMemberRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'required|string|max:255',
+            'email' => 'required|email|unique:members',
+            'endereco' => 'nullable|string',
+            'membership_data' => 'required|date',
+            'status' => 'required'
         ];
     }
 }
